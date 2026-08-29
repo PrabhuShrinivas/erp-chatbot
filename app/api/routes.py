@@ -55,7 +55,7 @@ async def ask_question(request: AskRequest, session: AsyncSession = Depends(get_
         # 3. Resolve Entity
         resolved_entity_id = None
         if plan.entity_name:
-            if plan.entity_type in ("customer", "supplier", "both"):
+            if plan.entity_type == "party":
                 resolved_entity_id = await resolver.resolve_party(session, plan.entity_name)
             elif plan.entity_type == "material":
                 resolved_entity_id = await resolver.resolve_material(session, plan.entity_name)
@@ -79,7 +79,7 @@ async def ask_question(request: AskRequest, session: AsyncSession = Depends(get_
             
         # Pass required kwargs depending on metric
         kwargs = {}
-        if plan.entity_type in ("customer", "supplier") and resolved_entity_id:
+        if plan.entity_type == "party" and resolved_entity_id:
             kwargs["party_id"] = resolved_entity_id
         if plan.entity_type == "material" and resolved_entity_id:
             kwargs["material_code"] = resolved_entity_id
