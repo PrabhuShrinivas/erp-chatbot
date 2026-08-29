@@ -14,8 +14,8 @@ class EntityResolver:
             
         clean_name = entity_name.strip().lower()
         
-        # 1. Exact match (case insensitive)
-        query = select(Party.id).where(Party.name.ilike(f"{clean_name}"))
+        # 1. Substring match (case insensitive)
+        query = select(Party.id).where(Party.name.ilike(f"%{clean_name}%"))
         result = await session.execute(query)
         rows = result.fetchall()
         
