@@ -96,12 +96,14 @@ class Payment(Base):
     payment_date = Column(Date, nullable=False)
     amount = Column(Numeric(18, 2), nullable=False)
     invoice_id = Column(UUID(as_uuid=True), ForeignKey('invoices.id'), nullable=True)
+    sales_order_id = Column(UUID(as_uuid=True), ForeignKey('sales_orders.id'), nullable=True)
     payment_method = Column(Text, nullable=True)
     reference_number = Column(Text, nullable=True)
     created_at = Column(DateTime(timezone=True), nullable=False, server_default=func.now())
 
     customer = relationship("Party", foreign_keys=[customer_id])
     invoice = relationship("Invoice", back_populates="payments")
+    sales_order = relationship("SalesOrder", foreign_keys=[sales_order_id])
 
 class GoodsReceipt(Base):
     __tablename__ = 'goods_receipts'
