@@ -16,8 +16,14 @@ def setup_logging():
         sql_logger.setLevel(logging.INFO)
         if not sql_logger.handlers:
             import sys
+            
+            class SQLFormatter(logging.Formatter):
+                def format(self, record):
+                    record.msg = str(record.msg).replace('\n', ' ').strip()
+                    return super().format(record)
+                    
             ch = logging.StreamHandler(sys.stdout)
-            ch.setFormatter(logging.Formatter('%(asctime)s [SQL] %(message)s'))
+            ch.setFormatter(SQLFormatter('%(asctime)s [SQL] %(message)s'))
             sql_logger.addHandler(ch)
         
     return logging.getLogger("erp_qa")

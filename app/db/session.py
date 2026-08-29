@@ -9,7 +9,8 @@ logger = logging.getLogger("erp_qa")
 
 @event.listens_for(engine.sync_engine, "before_execute")
 def before_execute(conn, clauseelement, multiparams, params, execution_options):
-    print(f"\n--- SQL GENERATED ---\n{clauseelement}\nParams: {params}\n---------------------", flush=True)
+    sql_str = str(clauseelement).replace('\n', ' ').strip()
+    print(f"\n--- SQL GENERATED ---\n{sql_str}\nParams: {params}\n---------------------", flush=True)
 
 async_session = async_sessionmaker(engine, expire_on_commit=False)
 
